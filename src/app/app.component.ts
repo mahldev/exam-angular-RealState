@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavBarComponent } from '@components';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [RouterOutlet, NavBarComponent],
+  template: `
+    <body>
+      <header>
+        <app-nav-bar />
+      </header>
+      <main>
+        <router-outlet />
+      </main>
+    </body>
+  `,
 })
-export class AppComponent {
-  title = 'angular-tutorial2';
-}
+export class AppComponent {}
