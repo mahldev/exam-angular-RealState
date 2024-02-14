@@ -7,16 +7,18 @@ import { House } from '@models';
   imports: [],
   template: `
     @if (house) {
-      <div class="flex flex-col">
-        <img src="{{ this.baseImage + house.photo }}" />
-        <div>
-          <p>{{ house.name }}</p>
+      <section class="flex flex-col rounded-lg">
+        <img
+          src="{{ baseImage + house.photo }}"
+          class="object-cover h-[250px] w-full rounded-lg"
+        />
+        <div class="flex flex-col gap-5">
+          <h2>{{ house.name }}</h2>
           <p>{{ house.city }}</p>
         </div>
-      </div>
+      </section>
     }
   `,
-  styles: ``,
 })
 export class HouseCardComponent {
   @Input() house: House | undefined = undefined;
