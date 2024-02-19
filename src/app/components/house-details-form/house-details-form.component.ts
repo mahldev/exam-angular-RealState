@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+type DefaultForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+
 @Component({
   selector: 'app-house-details-form',
   standalone: true,
@@ -65,20 +71,33 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 export class HouseDetailsFormComponent {
   private formBuilder = inject(FormBuilder);
 
+  data: DefaultForm = (() => {
+    const state: DefaultForm = JSON.parse(
+      localStorage.getItem('applyForm') || '{}',
+    );
+    return state;
+  })();
+
   applyForm = this.formBuilder.group({
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
+    firstName: [this.data.firstName, [Validators.required]],
+    lastName: [this.data.lastName, [Validators.required]],
+    email: [this.data.email, [Validators.required, Validators.email]],
   });
 
   submitApplication = (event: Event) => {
     event.preventDefault();
     if (this.applyForm.invalid) return;
 
+    this.saveToLocalStorage();
+
     alert(
       `${this.applyForm.value.firstName}, ${this.applyForm.value.lastName}, ${this.applyForm.value.email} `,
     );
 
     this.applyForm.reset();
+  };
+
+  saveToLocalStorage = () => {
+    localStorage.setItem('applyForm', JSON.stringify(this.applyForm.value));
   };
 }
