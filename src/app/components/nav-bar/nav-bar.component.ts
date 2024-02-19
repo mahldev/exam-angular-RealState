@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   template: `
     <nav class="flex">
       <a
-        class="flex gap-1 text-main text-3xl font-semibold items-center py-6 px-2"
+        class="flex gap-1 text-main text-3xl font-bold items-center py-6 px-2"
+        routerLink="/"
       >
         <svg
           width="24"

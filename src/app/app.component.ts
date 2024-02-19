@@ -7,7 +7,7 @@ import { NavBarComponent } from '@components';
   standalone: true,
   imports: [RouterOutlet, NavBarComponent],
   template: `
-    <body>
+    <body class="w-[1400px] m-auto">
       <header>
         <app-nav-bar />
       </header>

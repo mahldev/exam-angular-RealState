@@ -8,9 +8,21 @@ import { HouseService } from 'app/services/house.service';
   standalone: true,
   imports: [AsyncPipe, HouseCardComponent],
   template: `
-    @if (housesResponse | async; as response) {
-      <div class="grid grid-cols-3 gap-5 p-5">
-        @for (house of response.houses; track house.id) {
+    <div class="flex gap-3">
+      <input
+        type="text"
+        class="rounded-md border-gray-300 shadow-sm
+          focus:border-indigo-300
+          focus:ring focus:ring-indigo-200
+          focus:ring-opacity-50 w-full
+          py-2 px-3 sm:text-sm border-2"
+        placeholder="Filter by city"
+        (input)="handleFilter($event)"
+      />
+    </div>
+    @if (houses | async; as response) {
+      <div class="grid grid-cols-3 gap-5 mt-3">
+        @for (house of response; track house.id) {
           <app-house-card [house]="house" />
         }
       </div>
@@ -19,5 +31,16 @@ import { HouseService } from 'app/services/house.service';
 })
 export class MainRouteComponent {
   private houseServive = inject(HouseService);
-  housesResponse = this.houseServive.getHouses();
+  houses = this.houseServive.getHouses();
+
+  filterHouses = (city: string) =>
+    (this.houses = this.houseServive.filterHouses(city));
+
+  handleFilter = (event: Event) => {
+    const city = (event.target as HTMLInputElement).value;
+    console.log(city);
+    city === ''
+      ? (this.houses = this.houseServive.getHouses())
+      : this.filterHouses(city);
+  };
 }

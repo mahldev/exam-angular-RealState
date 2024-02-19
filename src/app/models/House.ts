@@ -7,4 +7,8 @@ export type House = {
   availableUnits: number;
   wifi: boolean;
   laundry: boolean;
+  location: {
+    lat: number;
+    lng: number;
+  };
 };
