@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-house-details-form',
@@ -57,19 +57,24 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
     button {
       color: #fff;
     }
+    .invalid-input {
+      border: 2px solid red;
+    }
   `,
 })
 export class HouseDetailsFormComponent {
   private formBuilder = inject(FormBuilder);
 
   applyForm = this.formBuilder.group({
-    firstName: '',
-    lastName: '',
-    email: '',
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
   });
 
   submitApplication = (event: Event) => {
     event.preventDefault();
+    if (this.applyForm.invalid) return;
+
     alert(
       `${this.applyForm.value.firstName}, ${this.applyForm.value.lastName}, ${this.applyForm.value.email} `,
     );

@@ -1,16 +1,19 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MapComponent } from '@components';
+import { MapComponent, WeatherComponent } from '@components';
 import { HouseService } from '@services';
 
 @Component({
   selector: 'app-map-view-route',
   standalone: true,
-  imports: [MapComponent, AsyncPipe],
+  imports: [MapComponent, AsyncPipe, WeatherComponent],
   template: `
     @if (selectedHouse | async; as house) {
-      <app-map [lat]="house.location.lat" [lng]="house.location.lng" />
+      <div class="flex w-full gap-8">
+        <app-map [lat]="house.location.lat" [lng]="house.location.lng" />
+        <app-weather />
+      </div>
     }
   `,
 })

@@ -24,8 +24,8 @@ export class HouseService {
         ),
       );
 
-  filterHouses = (city: string) => {
-    return this.http
+  filterHouses = (city: string) =>
+    this.http
       .get<HouseResponse>(this.URL)
       .pipe(
         map((response: HouseResponse) =>
@@ -34,5 +34,4 @@ export class HouseService {
           ),
         ),
       );
-  };
 }
