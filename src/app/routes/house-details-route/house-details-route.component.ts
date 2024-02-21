@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HouseDetailsFormComponent } from '@components';
@@ -7,14 +6,14 @@ import { HouseService } from '@services';
 @Component({
   selector: 'app-house-details-route',
   standalone: true,
-  imports: [AsyncPipe, HouseDetailsFormComponent, RouterLink],
+  imports: [HouseDetailsFormComponent, RouterLink],
   template: `
-    @if (house | async; as house) {
+    @if (house) {
       <article>
         <img
           class="listing-photo"
-          src="{{ baseImage + house?.photo }}"
-          alt="Exterior photo of {{ house?.name }}"
+          src="{{ baseImage + house.photo }}"
+          alt="Exterior photo of {{ house.name }}"
         />
         <section class="listing-description">
           <h2 class="listing-heading">{{ house.name }}</h2>
@@ -23,13 +22,14 @@ import { HouseService } from '@services';
         <section class="listing-features">
           <h2 class="section-heading">About this housing location</h2>
           <ul>
-            <li>Units available: {{ house?.availableUnits }}</li>
+            <li>Units available: {{ house.availableUnits }}</li>
             <li>Does this location have wifi: {{ house.wifi }}</li>
             <li>Does this location have laundry: {{ house.laundry }}</li>
+            <li>Score: {{ getScoreIncon(house.score) }}</li>
             <li><a routerLink="map">See on map view</a></li>
           </ul>
         </section>
-        <app-house-details-form />
+        <app-house-details-form [houseId]="house.id" />
       </article>
     }
   `,
@@ -112,6 +112,14 @@ export class HouseDetailsRouteComponent {
   private activedRoute = inject(ActivatedRoute);
   baseImage = 'https://angular.io/assets/images/tutorials/faa/';
 
+  getScoreIncon(score: number) {
+    if (score < 4) return '😣';
+    if (score < 6) return '😐';
+    if (score < 8) return '😊';
+    if (score >= 10) return '🤩';
+    return '🙂';
+  }
+
   houseId = Number(this.activedRoute.snapshot.params['id']);
-  house = this.houseService.getHouse(this.houseId);
+  house = this.houseService.getHouseStatic(this.houseId);
 }

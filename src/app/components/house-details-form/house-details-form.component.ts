@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HouseService } from '@services';
 
 type DefaultForm = {
   firstName: string;
@@ -23,7 +24,24 @@ type DefaultForm = {
 
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email" />
-        <button class="text-white bg-main rounded-md px-6 py-4">
+
+        <div class="flex gap-3">
+          <h1>Evaluate:</h1>
+          <select formControlName="score">
+            <option value="0" selected>0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <button class="text-white bg-main rounded-md px-6 py-4 mt-3">
           Apply now
         </button>
       </form>
@@ -70,6 +88,9 @@ type DefaultForm = {
 })
 export class HouseDetailsFormComponent {
   private formBuilder = inject(FormBuilder);
+  private houseService = inject(HouseService);
+
+  @Input() houseId: number | undefined = undefined;
 
   data: DefaultForm = (() => {
     const state: DefaultForm = JSON.parse(
@@ -81,23 +102,26 @@ export class HouseDetailsFormComponent {
   applyForm = this.formBuilder.group({
     firstName: [this.data.firstName, [Validators.required]],
     lastName: [this.data.lastName, [Validators.required]],
-    email: [this.data.email, [Validators.required, Validators.email]],
+    email: [this.data.email, [Validators.required]],
+    score: [0, [Validators.required]],
   });
 
   submitApplication = (event: Event) => {
     event.preventDefault();
     if (this.applyForm.invalid) return;
+    if (!this.houseId) return;
 
-    this.saveToLocalStorage();
+    this.saveCredentialsToLocalStorage();
 
-    alert(
-      `${this.applyForm.value.firstName}, ${this.applyForm.value.lastName}, ${this.applyForm.value.email} `,
+    this.houseService.changeScoreStatic(
+      this.houseId,
+      this.applyForm.value.score as number,
     );
 
     this.applyForm.reset();
   };
 
-  saveToLocalStorage = () => {
+  saveCredentialsToLocalStorage = () => {
     localStorage.setItem('applyForm', JSON.stringify(this.applyForm.value));
   };
 }

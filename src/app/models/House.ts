@@ -11,4 +11,5 @@ export type House = {
     lat: number;
     lng: number;
   };
+  score: number;
 };
